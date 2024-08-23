@@ -15,23 +15,28 @@ class AttendeeController extends Controller
      */
     public function index(Event $event)
     {
-        return AttendeeResource::collection($event->attendees);
+        return AttendeeResource::collection($event->attendees()->latest()->paginate(5));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Event $event)
     {
-        //
+        $attendee = $event->attendees()->create([
+            'user_id'=> 1,
+
+        ]);
+
+        return new AttendeeResource($attendee);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Event $event, Attendee $attendee)
     {
-        //
+        return new AttendeeResource($attendee);
     }
 
     /**
